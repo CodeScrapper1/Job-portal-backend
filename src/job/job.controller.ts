@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -63,5 +64,16 @@ export class JobController {
     const userId = req.user.id;
     const result = await this.jobService.getFavorites(userId);
     return { result, success: true };
+  }
+
+  // delete company
+  @Delete(':id')
+  async deleteJob(@Param('id') jobId: string) {
+    const result = await this.jobService.deleteJob(jobId);
+    return {
+      result,
+      success: true,
+      message: 'Company deleted successfylly',
+    };
   }
 }

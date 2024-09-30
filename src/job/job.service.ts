@@ -36,6 +36,7 @@ export class JobService {
         companyId,
         createdById,
       },
+      include: { company: true },
     });
 
     if (!job) {
@@ -81,7 +82,11 @@ export class JobService {
         orderBy: { createdAt: 'desc' },
       });
     } else {
-      jobs = await this.prisma.job.findMany({ skip: 0, take: 6 });
+      jobs = await this.prisma.job.findMany({
+        skip: 0,
+        take: 6,
+        include: { company: true },
+      });
     }
 
     if (!jobs || jobs.length == 0) {
@@ -95,6 +100,7 @@ export class JobService {
   async getJobById(id: string) {
     const job = await this.prisma.job.findUnique({
       where: { id },
+      include: { applications: true },
     });
 
     if (!job) {
@@ -163,5 +169,18 @@ export class JobService {
     } catch (error) {
       throw new NotFoundException('Job not found');
     }
+  }
+
+  // delete job
+  async deleteJob(id: string) {
+    const job = await this.prisma.job.delete({
+      where: { id },
+    });
+
+    if (!job) {
+      throw new NotFoundException('Job not deleted');
+    }
+
+    return job;
   }
 }

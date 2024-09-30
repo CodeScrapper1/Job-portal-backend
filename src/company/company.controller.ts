@@ -28,6 +28,7 @@ export class CompanyController {
       userId,
       registerCompanyDto,
     );
+    console.log(result, 'result');
 
     return {
       message: 'Company created successfully',
